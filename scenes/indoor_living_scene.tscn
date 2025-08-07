@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt0xft8f5b10t"]
+
+[ext_resource type="ArrayMesh" uid="uid://dtoy8wh21knp5" path="res://assets/models/living_room/living_room.obj" id="1_5cs5n"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8vwag"]
+
+[node name="IndoorLivingScene" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0241928, 0.0100765, 0.0271111)
+shape = SubResource("WorldBoundaryShape3D_8vwag")
+debug_fill = false
+
+[node name="LivingRoom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.72257)
+mesh = ExtResource("1_5cs5n")

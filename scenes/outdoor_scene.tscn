@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4j6oeaq4xoi"]
+
+[ext_resource type="PackedScene" uid="uid://b222fbaytu8yd" path="res://assets/models/Sponza-master/sponza-resized.fbx" id="1_7y4gw"]
+
+[node name="OutdoorScene" type="Node3D"]
+
+[node name="sponza-resized" parent="." instance=ExtResource("1_7y4gw")]
