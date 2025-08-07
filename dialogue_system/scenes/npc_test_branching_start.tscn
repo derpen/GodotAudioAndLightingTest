@@ -1,0 +1,109 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlkgxiurtg4d"]
+
+[ext_resource type="PackedScene" uid="uid://b55ybw77u563" path="res://dialogue_system/interactable/interactable.tscn" id="1_06rtr"]
+[ext_resource type="PackedScene" uid="uid://t5x38d5w0gmf" path="res://dialogue_system/interactable/interactable_action.tscn" id="2_xon6g"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i76gx"]
+radius = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_i76gx"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4ea8n"]
+radius = 0.2
+
+[node name="NPCBranchStart" type="CharacterBody3D"]
+collision_layer = 5
+collision_mask = 0
+
+[node name="Interactable" parent="." node_paths=PackedStringArray("focus_target", "start_node") instance=ExtResource("1_06rtr")]
+focus_target = NodePath("../CollisionShape3D/head/FocusTarget")
+start_node = NodePath("Start")
+
+[node name="Start_Again" parent="Interactable" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Yo!", "Ready to learn about 
+how this dialogue system 
+works ?"])
+next_action = NodePath("../Start/Choice")
+
+[node name="Start" parent="Interactable" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Hi", "Would you like to
+know about how this
+dialogue system works?"])
+next_action = NodePath("Choice")
+
+[node name="Choice" parent="Interactable/Start" instance=ExtResource("2_xon6g")]
+action_type = 1
+choices = Dictionary[String, NodePath]({
+"No Thanks": NodePath("Refuse"),
+"Sure, how does it work?": NodePath("YappingAndExplaining")
+})
+
+[node name="Refuse" parent="Interactable/Start/Choice" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Unfortunate", "But, if you ever
+change your mind,
+I'm always here!"])
+next_action = NodePath("Break")
+
+[node name="Break" parent="Interactable/Start/Choice/Refuse" instance=ExtResource("2_xon6g")]
+action_type = 3
+next_action = NodePath("../../../../Start_Again")
+
+[node name="YappingAndExplaining" parent="Interactable/Start/Choice" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Cool!", "You see, this thing
+uses some weird-ass
+LinkedList like system", "Each node would have
+a next node", "After visiting a node, it 
+will be then be assigned
+as the starting node", "So the next time you
+interact with the object
+again, it will start there,
+where you expect it to be"])
+next_action = NodePath("DoneExplaining")
+
+[node name="DoneExplaining" parent="Interactable/Start/Choice/YappingAndExplaining" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["That is pretty much it", "Let me know if you
+want to listen to it
+again !"])
+next_action = NodePath("Break")
+
+[node name="Break" parent="Interactable/Start/Choice/YappingAndExplaining/DoneExplaining" instance=ExtResource("2_xon6g")]
+action_type = 3
+next_action = NodePath("Again")
+
+[node name="Again" parent="Interactable/Start/Choice/YappingAndExplaining/DoneExplaining/Break" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Would you like
+to learn again?"])
+next_action = NodePath("ChoiceAgain")
+
+[node name="ChoiceAgain" parent="Interactable/Start/Choice/YappingAndExplaining/DoneExplaining/Break/Again" instance=ExtResource("2_xon6g")]
+action_type = 1
+choices = Dictionary[String, NodePath]({
+"How does the system works again ?": NodePath("../../../.."),
+"It's ok, I got it": NodePath("NoThanks")
+})
+
+[node name="NoThanks" parent="Interactable/Start/Choice/YappingAndExplaining/DoneExplaining/Break/Again/ChoiceAgain" instance=ExtResource("2_xon6g")]
+dialogues = Array[String](["Good! I'm always
+here if you change
+your mind!"])
+next_action = NodePath("Break")
+
+[node name="Break" parent="Interactable/Start/Choice/YappingAndExplaining/DoneExplaining/Break/Again/ChoiceAgain/NoThanks" instance=ExtResource("2_xon6g")]
+action_type = 3
+next_action = NodePath("../../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_i76gx")
+
+[node name="head" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56144, -0.196867)
+mesh = SubResource("BoxMesh_i76gx")
+skeleton = NodePath("../..")
+
+[node name="FocusTarget" type="Node3D" parent="CollisionShape3D/head"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_4ea8n")
+skeleton = NodePath("../..")

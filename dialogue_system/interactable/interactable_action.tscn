@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://t5x38d5w0gmf"]
+
+[ext_resource type="Script" uid="uid://ce2gmjpwd0mnv" path="res://dialogue_system/interactable/interactable_action.gd" id="1_ki3qb"]
+
+[node name="InteractableAction" type="Node"]
+script = ExtResource("1_ki3qb")
+dialogues = Array[String]([])
+next_action = NodePath("")

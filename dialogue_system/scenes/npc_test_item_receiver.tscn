@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://i3wsjs7e1kj1"]
+
+[ext_resource type="PackedScene" uid="uid://b55ybw77u563" path="res://dialogue_system/interactable/interactable.tscn" id="1_lfq20"]
+[ext_resource type="PackedScene" uid="uid://t5x38d5w0gmf" path="res://dialogue_system/interactable/interactable_action.tscn" id="2_x4tgo"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i76gx"]
+radius = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_i76gx"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4ea8n"]
+radius = 0.2
+
+[node name="NPCItemReceiver" type="CharacterBody3D"]
+collision_layer = 5
+collision_mask = 0
+
+[node name="Interactable" parent="." node_paths=PackedStringArray("focus_target", "start_node") instance=ExtResource("1_lfq20")]
+focus_target = NodePath("../CollisionShape3D/head/FocusTarget")
+start_node = NodePath("FirstDialogue")
+
+[node name="FirstDialogue" parent="Interactable" instance=ExtResource("2_x4tgo")]
+dialogues = Array[String](["Hey, you have money?"])
+next_action = NodePath("CheckMoney")
+
+[node name="CheckMoney" parent="Interactable/FirstDialogue" instance=ExtResource("2_x4tgo")]
+action_type = 2
+item_to_check = "Money"
+item_to_give = ""
+item_next_node_fail = NodePath("MoneyCheckFail")
+item_next_node_success = NodePath("MoneyCheckSuccess")
+
+[node name="MoneyCheckFail" parent="Interactable/FirstDialogue/CheckMoney" instance=ExtResource("2_x4tgo")]
+dialogues = Array[String](["Aww man", "It's okay, I'll wait for it"])
+next_action = NodePath("Stop")
+
+[node name="Stop" parent="Interactable/FirstDialogue/CheckMoney/MoneyCheckFail" instance=ExtResource("2_x4tgo")]
+action_type = 3
+next_action = NodePath("../../..")
+
+[node name="MoneyCheckSuccess" parent="Interactable/FirstDialogue/CheckMoney" instance=ExtResource("2_x4tgo")]
+dialogues = Array[String](["Thanks man", "This will help me 
+a lot"])
+next_action = NodePath("Final")
+
+[node name="Final" parent="Interactable/FirstDialogue/CheckMoney/MoneyCheckSuccess" instance=ExtResource("2_x4tgo")]
+dialogues = Array[String](["I will never forget your 
+sacrifice"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_i76gx")
+
+[node name="head" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56144, -0.196867)
+mesh = SubResource("BoxMesh_i76gx")
+skeleton = NodePath("../..")
+
+[node name="FocusTarget" type="Node3D" parent="CollisionShape3D/head"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_4ea8n")
+skeleton = NodePath("../..")

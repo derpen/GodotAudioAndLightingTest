@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjkr0ao1woxql"]
+
+[ext_resource type="PackedScene" uid="uid://b55ybw77u563" path="res://dialogue_system/interactable/interactable.tscn" id="2_4ea8n"]
+[ext_resource type="PackedScene" uid="uid://t5x38d5w0gmf" path="res://dialogue_system/interactable/interactable_action.tscn" id="2_d018b"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i76gx"]
+radius = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_i76gx"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4ea8n"]
+radius = 0.2
+
+[node name="NPCItemGiver" type="CharacterBody3D"]
+collision_layer = 5
+collision_mask = 0
+
+[node name="Interactable" parent="." node_paths=PackedStringArray("focus_target", "start_node") instance=ExtResource("2_4ea8n")]
+focus_target = NodePath("../CollisionShape3D/head/FocusTarget")
+start_node = NodePath("FirstDialogue")
+
+[node name="FirstDialogue" parent="Interactable" instance=ExtResource("2_d018b")]
+dialogues = Array[String](["Hello", "Do you want some money?"])
+next_action = NodePath("ChoiceOfferingItem")
+
+[node name="ChoiceOfferingItem" parent="Interactable/FirstDialogue" instance=ExtResource("2_d018b")]
+action_type = 1
+choices = Dictionary[String, NodePath]({
+"Accept": NodePath("GivingItem"),
+"Refuse": NodePath("RefusingItem")
+})
+
+[node name="RefusingItem" parent="Interactable/FirstDialogue/ChoiceOfferingItem" instance=ExtResource("2_d018b")]
+dialogues = Array[String](["Aww, okay then", "Come back to me
+if you want it again"])
+next_action = NodePath("Stop")
+
+[node name="Stop" parent="Interactable/FirstDialogue/ChoiceOfferingItem/RefusingItem" instance=ExtResource("2_d018b")]
+action_type = 3
+next_action = NodePath("../../..")
+
+[node name="GivingItem" parent="Interactable/FirstDialogue/ChoiceOfferingItem" instance=ExtResource("2_d018b")]
+action_type = 2
+item_to_check = ""
+item_to_give = "Money"
+item_next_node_fail = NodePath("")
+item_next_node_success = NodePath("FinalDialogue")
+
+[node name="FinalDialogue" parent="Interactable/FirstDialogue/ChoiceOfferingItem/GivingItem" instance=ExtResource("2_d018b")]
+dialogues = Array[String](["Use it well", "Like for example,
+give it to this other
+guy in front"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_i76gx")
+
+[node name="head" type="MeshInstance3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56144, -0.196867)
+mesh = SubResource("BoxMesh_i76gx")
+skeleton = NodePath("../..")
+
+[node name="FocusTarget" type="Node3D" parent="CollisionShape3D/head"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("CapsuleMesh_4ea8n")
+skeleton = NodePath("../..")

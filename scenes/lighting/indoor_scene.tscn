@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6no73i2iwaac"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_y0byw"]
+size = Vector3(5, 0.5, 5)
+
+[node name="IndoorScene" type="Node3D"]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+use_collision = true
+mesh = SubResource("BoxMesh_y0byw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 8.59922, 5.79707)

@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgwydnjkbagj5"]
+
+[ext_resource type="PackedScene" uid="uid://b55ybw77u563" path="res://dialogue_system/interactable/interactable.tscn" id="1_cpyd4"]
+[ext_resource type="PackedScene" uid="uid://t5x38d5w0gmf" path="res://dialogue_system/interactable/interactable_action.tscn" id="2_btrd3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ljj7u"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ljj7u"]
+
+[node name="Chair" type="StaticBody3D"]
+collision_layer = 5
+collision_mask = 0
+
+[node name="Interactable" parent="." node_paths=PackedStringArray("focus_target", "start_node") instance=ExtResource("1_cpyd4")]
+focus_target = NodePath("../FocusTarget")
+start_node = NodePath("Inspect")
+
+[node name="Inspect" parent="Interactable" instance=ExtResource("2_btrd3")]
+dialogues = Array[String](["This is a chair", "Well, not really, it's not,
+it's currently just a box", "Hopefully this will be
+a chair later"])
+next_action = NodePath("Inspect_Two")
+
+[node name="Inspect_Two" parent="Interactable/Inspect" instance=ExtResource("2_btrd3")]
+dialogues = Array[String](["I will have the desire
+to make this into a 
+chair later"])
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_ljj7u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("BoxMesh_ljj7u")
+
+[node name="FocusTarget" type="Node3D" parent="."]

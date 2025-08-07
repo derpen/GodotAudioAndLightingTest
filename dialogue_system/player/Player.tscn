@@ -1,0 +1,173 @@
+[gd_scene load_steps=8 format=3 uid="uid://eun1ujiv3phy"]
+
+[ext_resource type="Script" uid="uid://cndyqq46x8u60" path="res://dialogue_system/player/player.gd" id="1_0twrf"]
+[ext_resource type="Script" uid="uid://dgw8b70n3hx8q" path="res://dialogue_system/player/interact_handler.gd" id="2_0nvwu"]
+[ext_resource type="Texture2D" uid="uid://bxdcmyi0uw45" path="res://dialogue_system/player/crosshair.png" id="2_pais0"]
+[ext_resource type="Texture2D" uid="uid://ca7fvrs8wbno3" path="res://dialogue_system/player/crosshair_box.png" id="4_ei5ns"]
+[ext_resource type="Script" uid="uid://dbwmmeyqarlhi" path="res://dialogue_system/player/dialogue_handler.gd" id="4_qt0wr"]
+[ext_resource type="Script" uid="uid://jipy24tv38u2" path="res://dialogue_system/player/item_notification_handler.gd" id="5_aqcbf"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tyfse"]
+radius = 0.25
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("current_camera", "head", "raycaster", "dialogue_handler", "item_notification")]
+collision_layer = 2
+collision_mask = 97
+script = ExtResource("1_0twrf")
+current_camera = NodePath("head/Camera")
+head = NodePath("head")
+raycaster = NodePath("head/RayCast3D")
+dialogue_handler = NodePath("CanvasLayer/DialogueHolder")
+item_notification = NodePath("CanvasLayer/Inventory")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_tyfse")
+
+[node name="head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+
+[node name="Camera" type="Camera3D" parent="head"]
+
+[node name="RayCast3D" type="RayCast3D" parent="head" node_paths=PackedStringArray("player_character", "crosshair_reticle", "crosshair_box", "dialogue_handler")]
+target_position = Vector3(0, 0, -1.25)
+collision_mask = 12
+script = ExtResource("2_0nvwu")
+player_character = NodePath("../..")
+crosshair_reticle = NodePath("../../CanvasLayer/CrosshairHolder/reticle")
+crosshair_box = NodePath("../../CanvasLayer/CrosshairHolder/box")
+dialogue_handler = NodePath("../../CanvasLayer/DialogueHolder")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CrosshairHolder" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="reticle" type="TextureRect" parent="CanvasLayer/CrosshairHolder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.02, 0.02)
+pivot_offset = Vector2(128, 128)
+texture = ExtResource("2_pais0")
+
+[node name="box" type="TextureRect" parent="CanvasLayer/CrosshairHolder"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -128.0
+offset_right = 128.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.02, 0.02)
+pivot_offset = Vector2(128, 128)
+texture = ExtResource("4_ei5ns")
+
+[node name="Inventory" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("notification_label", "notification_timer")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_aqcbf")
+notification_label = NodePath("MarginContainer/InventoryNotification")
+notification_timer = NodePath("MarginContainer/InventoryNotification/Timer")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Inventory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+
+[node name="InventoryNotification" type="RichTextLabel" parent="CanvasLayer/Inventory/MarginContainer"]
+layout_mode = 2
+
+[node name="Timer" type="Timer" parent="CanvasLayer/Inventory/MarginContainer/InventoryNotification"]
+wait_time = 5.0
+
+[node name="DialogueHolder" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("dialogue_label", "choice_container", "button_container", "player_character")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_qt0wr")
+dialogue_label = NodePath("VBoxContainer/RichTextLabel")
+choice_container = NodePath("VBoxContainer/ChoiceContainer")
+button_container = NodePath("VBoxContainer/ChoiceContainer/CenterContainer/HBoxContainer")
+player_character = NodePath("../..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DialogueHolder"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Empty" type="Control" parent="CanvasLayer/DialogueHolder/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.63
+
+[node name="ChoiceContainer" type="Control" parent="CanvasLayer/DialogueHolder/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/DialogueHolder/VBoxContainer/ChoiceContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/DialogueHolder/VBoxContainer/ChoiceContainer/CenterContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/DialogueHolder/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="TemporaryLightRemoveLaterMightWannaHaveALayerToOnlyLightUpCertainThings" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60264, 0)
+omni_range = 1.0
+
+[connection signal="timeout" from="CanvasLayer/Inventory/MarginContainer/InventoryNotification/Timer" to="CanvasLayer/Inventory" method="_on_timer_timeout"]
