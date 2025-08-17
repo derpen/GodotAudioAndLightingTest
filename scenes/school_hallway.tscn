@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgcc5f4cs3f6"]
+
+[ext_resource type="PackedScene" uid="uid://cet7jii3t458g" path="res://assets/models/school_hallway/School_Hallway.glb" id="1_tcaao"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_tcaao"]
+
+[sub_resource type="Environment" id="Environment_tcaao"]
+background_mode = 1
+ambient_light_source = 2
+tonemap_mode = 3
+ssao_enabled = true
+ssao_power = 0.812253
+fog_light_color = Color(0.237252, 0.300495, 0.592796, 1)
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.4731
+volumetric_fog_albedo = Color(0.122252, 0.122252, 0.122252, 1)
+adjustment_enabled = true
+adjustment_brightness = 3.0
+
+[node name="School_Hallway" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_tcaao")
+debug_fill = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tcaao")
+
+[node name="School_Hallway" parent="." instance=ExtResource("1_tcaao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)

@@ -1,10 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://nyqb86v3vq2w"]
 
 [ext_resource type="PackedScene" uid="uid://eun1ujiv3phy" path="res://dialogue_system/player/Player.tscn" id="2_72e8q"]
-[ext_resource type="PackedScene" uid="uid://d0eq84rksyhxg" path="res://scenes/indoor_sibenik_scene.tscn" id="2_d2op2"]
+[ext_resource type="PackedScene" uid="uid://dyieg1t0gnj23" path="res://scenes/japanese_school_corridor.tscn" id="2_d2op2"]
 
 [node name="MainGame" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("2_72e8q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88913, 0, 0.134969)
 
-[node name="IndoorLivingScene" parent="." instance=ExtResource("2_d2op2")]
+[node name="JapaneseSchoolCorridor" parent="." instance=ExtResource("2_d2op2")]

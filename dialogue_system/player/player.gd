@@ -10,6 +10,7 @@ class_name PlayerController extends CharacterBody3D
 @export var player_state : PLAYER_STATE = PLAYER_STATE.WALKING
 @export var dialogue_handler : DialogueHandler
 @export var item_notification : ItemNotification
+@export var flashlight_object : Node3D
 
 var mouse_mode : Input.MouseMode = Input.MOUSE_MODE_CAPTURED
 var enable_cam : bool = true
@@ -25,10 +26,34 @@ var camera_motion : Vector2i
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		camera_motion = event.relative
+	
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_F:
+			_toggle_flashlight()
+
 
 	if event is InputEventKey:
-		if event.pressed and event.keycode == KEY_Q and OS.is_debug_build():
-			_toggle_mouse_mode()
+		if OS.is_debug_build():
+			if event.pressed and event.keycode == KEY_Q:
+				_toggle_mouse_mode()
+
+			if event.pressed and event.keycode == KEY_SHIFT:
+				enable_float = true
+				float_direction = Vector3(0.0, 0.2, 0.0)
+
+			if event.pressed and event.keycode == KEY_CTRL:
+				enable_float = true
+				float_direction = Vector3(0.0, -0.2, 0.0)
+
+
+func _toggle_flashlight() -> void:
+	flashlight_object.visible = !flashlight_object.visible
+
+
+var enable_float : bool = false
+var float_direction : Vector3 = Vector3.ZERO
+func _character_float(new_float_direction: Vector3) -> void:
+	global_position += float_direction
 	
 
 ## Will always walk
@@ -81,18 +106,24 @@ func _physics_process(_delta: float) -> void:
 		var input_velocity : Vector3 = -transform.basis.z * input_velocity_z + transform.basis.x * input_velocity_x
 		input_velocity = input_velocity.normalized() * move_speed
 
-		## Cringe slope hack
-		var floor_normal : Vector3 = get_floor_normal()
-		if floor_normal != Vector3.ZERO and input_velocity.x != 0.0 and input_velocity_z != 0.0:
-			input_velocity.y = 10.0
+		# ## Cringe slope hack
+		# var floor_normal : Vector3 = get_floor_normal()
+		# if floor_normal != Vector3.ZERO and input_velocity.x != 0.0 and input_velocity_z != 0.0:
+		# 	input_velocity.y = 10.0
 
-		velocity = input_velocity + get_gravity()
+		# velocity = input_velocity + get_gravity()
+		velocity = input_velocity
 
 		if enable_cam:
 			_handle_yaw(camera_motion)
 			_handle_pitch(camera_motion)
 			
 		camera_motion = Vector2.ZERO
+
+		if OS.is_debug_build():
+			if enable_float:
+				_character_float(float_direction)
+				enable_float = false
 
 		move_and_slide()
 

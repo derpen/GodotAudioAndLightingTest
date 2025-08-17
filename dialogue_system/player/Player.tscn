@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://eun1ujiv3phy"]
+[gd_scene load_steps=9 format=3 uid="uid://eun1ujiv3phy"]
 
 [ext_resource type="Script" uid="uid://cndyqq46x8u60" path="res://dialogue_system/player/player.gd" id="1_0twrf"]
 [ext_resource type="Script" uid="uid://dgw8b70n3hx8q" path="res://dialogue_system/player/interact_handler.gd" id="2_0nvwu"]
 [ext_resource type="Texture2D" uid="uid://bxdcmyi0uw45" path="res://dialogue_system/player/crosshair.png" id="2_pais0"]
+[ext_resource type="Texture2D" uid="uid://xphdohaa74dq" path="res://assets/textures/flashlight.png" id="3_mi2ny"]
 [ext_resource type="Texture2D" uid="uid://ca7fvrs8wbno3" path="res://dialogue_system/player/crosshair_box.png" id="4_ei5ns"]
 [ext_resource type="Script" uid="uid://dbwmmeyqarlhi" path="res://dialogue_system/player/dialogue_handler.gd" id="4_qt0wr"]
 [ext_resource type="Script" uid="uid://jipy24tv38u2" path="res://dialogue_system/player/item_notification_handler.gd" id="5_aqcbf"]
@@ -10,7 +11,7 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tyfse"]
 radius = 0.25
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("current_camera", "head", "raycaster", "dialogue_handler", "item_notification")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("current_camera", "head", "raycaster", "dialogue_handler", "item_notification", "flashlight_object")]
 collision_layer = 2
 collision_mask = 97
 script = ExtResource("1_0twrf")
@@ -19,6 +20,7 @@ head = NodePath("head")
 raycaster = NodePath("head/RayCast3D")
 dialogue_handler = NodePath("CanvasLayer/DialogueHolder")
 item_notification = NodePath("CanvasLayer/Inventory")
+flashlight_object = NodePath("head/SpotLight3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -37,6 +39,13 @@ player_character = NodePath("../..")
 crosshair_reticle = NodePath("../../CanvasLayer/CrosshairHolder/reticle")
 crosshair_box = NodePath("../../CanvasLayer/CrosshairHolder/box")
 dialogue_handler = NodePath("../../CanvasLayer/DialogueHolder")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="head"]
+light_energy = 2.0
+light_projector = ExtResource("3_mi2ny")
+shadow_enabled = true
+distance_fade_enabled = true
+spot_range = 50.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -165,9 +174,5 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 1
-
-[node name="TemporaryLightRemoveLaterMightWannaHaveALayerToOnlyLightUpCertainThings" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.60264, 0)
-omni_range = 1.0
 
 [connection signal="timeout" from="CanvasLayer/Inventory/MarginContainer/InventoryNotification/Timer" to="CanvasLayer/Inventory" method="_on_timer_timeout"]

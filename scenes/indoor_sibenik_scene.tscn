@@ -1,8 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0eq84rksyhxg"]
+[gd_scene load_steps=4 format=3 uid="uid://d0eq84rksyhxg"]
 
 [ext_resource type="PackedScene" uid="uid://gnukdfhpsyt8" path="res://assets/models/sibenik/sibenik-readjusted.blend" id="1_r3hrv"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_8vwag"]
+
+[sub_resource type="Environment" id="Environment_kilwb"]
+background_mode = 1
+background_color = Color(0.0314456, 0.0407189, 0.0793418, 1)
+background_energy_multiplier = 1.75
+ambient_light_source = 2
+ambient_light_color = Color(0.107242, 0.129079, 0.205388, 1)
+volumetric_fog_enabled = true
+volumetric_fog_emission = Color(0.118581, 0.118581, 0.118581, 1)
+volumetric_fog_anisotropy = -0.15
 
 [node name="IndoorLivingScene" type="Node3D"]
 
@@ -14,3 +24,13 @@ shape = SubResource("WorldBoundaryShape3D_8vwag")
 debug_fill = false
 
 [node name="sibenik-readjusted" parent="." instance=ExtResource("1_r3hrv")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kilwb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.757072, -0.546246, 0.358409, -0.33631, 0.796157, 0.50302, -0.560123, 0.260286, -0.786456, 0, 4.49258, 0)
+light_color = Color(0.146879, 0.201253, 0.388356, 1)
+light_energy = 16.0
+shadow_enabled = true
+sky_mode = 1

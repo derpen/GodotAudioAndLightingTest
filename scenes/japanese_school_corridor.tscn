@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyieg1t0gnj23"]
+
+[ext_resource type="PackedScene" uid="uid://jrgub4ihtnp7" path="res://assets/models/jp_school_corridor/jp_school_corridor.glb" id="1_28jrp"]
+[ext_resource type="LightmapGIData" uid="uid://ckhew34xcujfv" path="res://scenes/japanese_school_corridor.lmbake" id="2_qkvs4"]
+
+[sub_resource type="Environment" id="Environment_28jrp"]
+ambient_light_source = 2
+ambient_light_color = Color(0.0431373, 0.0431373, 0.0588235, 1)
+
+[node name="JapaneseSchoolCorridor" type="Node3D"]
+
+[node name="jp_school_corridor" parent="." instance=ExtResource("1_28jrp")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_28jrp")
+
+[node name="LightmapGI" type="LightmapGI" parent="."]
+bounces = 16
+light_data = ExtResource("2_qkvs4")
