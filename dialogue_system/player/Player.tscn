@@ -22,6 +22,10 @@ dialogue_handler = NodePath("CanvasLayer/DialogueHolder")
 item_notification = NodePath("CanvasLayer/Inventory")
 flashlight_object = NodePath("head/SpotLight3D")
 
+[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="."]
+event_guid = "{00000000-0000-0000-0000-000000000000}"
+attached = false
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_tyfse")
@@ -46,6 +50,8 @@ light_projector = ExtResource("3_mi2ny")
 shadow_enabled = true
 distance_fade_enabled = true
 spot_range = 50.0
+
+[node name="FmodListener3D" type="FmodListener3D" parent="head"]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

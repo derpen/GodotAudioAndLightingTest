@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://ddllnti6kxl25"]
+
+[ext_resource type="PackedScene" uid="uid://bja8tcbyuihry" path="res://assets/models/playground/AudioEnvironment.blend" id="1_hddm4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hddm4"]
+sky_curve = 0.0549031
+
+[sub_resource type="Sky" id="Sky_qchbg"]
+sky_material = SubResource("ProceduralSkyMaterial_hddm4")
+
+[sub_resource type="Environment" id="Environment_kddj0"]
+background_mode = 2
+sky = SubResource("Sky_qchbg")
+
+[node name="Playground" type="Node3D"]
+
+[node name="AudioEnvironment" parent="." instance=ExtResource("1_hddm4")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kddj0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.629781, 0.651891, -0.42239, 0, 0.543775, 0.839231, 0.776772, -0.528532, 0.34246, 0, 1.5069, 0)
