@@ -6,9 +6,9 @@
 [node name="MainGame" type="Node3D"]
 
 [node name="FmodBankLoader" type="FmodBankLoader" parent="."]
-bank_paths = ["res://assets/audio/bank/Desktop/Master.strings.bank", "res://assets/audio/bank/Desktop/Master.bank"]
+bank_paths = ["res://assets/audio/bank/Desktop/Master.strings.bank", "res://assets/audio/bank/Desktop/Master.bank", "res://assets/audio/bank/Desktop/Player.bank", "res://assets/audio/bank/Desktop/SpatialMusic.bank"]
 
 [node name="Player" parent="." instance=ExtResource("2_72e8q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88913, 0, 0.134969)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.7428, 3.8147e-06, 1.28525)
 
 [node name="Playground" parent="." instance=ExtResource("2_d2op2")]

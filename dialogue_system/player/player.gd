@@ -11,6 +11,7 @@ class_name PlayerController extends CharacterBody3D
 @export var dialogue_handler : DialogueHandler
 @export var item_notification : ItemNotification
 @export var flashlight_object : Node3D
+@export var footstep_audio : FmodEventEmitter3D
 
 var mouse_mode : Input.MouseMode = Input.MOUSE_MODE_CAPTURED
 var enable_cam : bool = true
@@ -98,6 +99,7 @@ func _handle_pitch(current_camera_motion: Vector2i) -> void:
 	head.rotation.x = clamp(head.rotation.x, -1.5, 1.5)
 
 
+var footstep_playing : bool = false
 func _physics_process(_delta: float) -> void:
 	if player_state == PLAYER_STATE.WALKING:
 		var input_velocity_z = Input.get_axis("move_backward", "move_forward")
@@ -111,8 +113,8 @@ func _physics_process(_delta: float) -> void:
 		# if floor_normal != Vector3.ZERO and input_velocity.x != 0.0 and input_velocity_z != 0.0:
 		# 	input_velocity.y = 10.0
 
-		# velocity = input_velocity + get_gravity()
-		velocity = input_velocity
+		velocity = input_velocity + get_gravity()
+		#velocity = input_velocity
 
 		if enable_cam:
 			_handle_yaw(camera_motion)
@@ -124,6 +126,11 @@ func _physics_process(_delta: float) -> void:
 			if enable_float:
 				_character_float(float_direction)
 				enable_float = false
+				
+		if (velocity.x > 0.0 or velocity.z > 0.0) and !footstep_playing:
+			# footstep_audio.play_one_shot()
+			footstep_playing = true
+			footstep_audio.play()
 
 		move_and_slide()
 
@@ -154,3 +161,7 @@ func _check_item(item: String) -> bool:
 		result = false
 
 	return result
+
+
+func _on_footstep_audio_stopped() -> void:
+	footstep_playing = false

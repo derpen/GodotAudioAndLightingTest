@@ -11,7 +11,7 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tyfse"]
 radius = 0.25
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("current_camera", "head", "raycaster", "dialogue_handler", "item_notification", "flashlight_object")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("current_camera", "head", "raycaster", "dialogue_handler", "item_notification", "flashlight_object", "footstep_audio")]
 collision_layer = 2
 collision_mask = 97
 script = ExtResource("1_0twrf")
@@ -21,9 +21,11 @@ raycaster = NodePath("head/RayCast3D")
 dialogue_handler = NodePath("CanvasLayer/DialogueHolder")
 item_notification = NodePath("CanvasLayer/Inventory")
 flashlight_object = NodePath("head/SpotLight3D")
+footstep_audio = NodePath("FootstepAudio")
 
-[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="."]
-event_guid = "{00000000-0000-0000-0000-000000000000}"
+[node name="FootstepAudio" type="FmodEventEmitter3D" parent="."]
+event_name = "event:/Player/Footstep"
+event_guid = "{0d7e143a-9721-48bc-80ea-3348561affef}"
 attached = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -181,4 +183,5 @@ scroll_active = false
 autowrap_mode = 0
 horizontal_alignment = 1
 
+[connection signal="stopped" from="FootstepAudio" to="." method="_on_footstep_audio_stopped"]
 [connection signal="timeout" from="CanvasLayer/Inventory/MarginContainer/InventoryNotification/Timer" to="CanvasLayer/Inventory" method="_on_timer_timeout"]

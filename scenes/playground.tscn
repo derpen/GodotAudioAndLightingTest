@@ -21,3 +21,19 @@ environment = SubResource("Environment_kddj0")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.629781, 0.651891, -0.42239, 0, 0.543775, 0.839231, 0.776772, -0.528532, 0.34246, 0, 1.5069, 0)
+
+[node name="EnkouShoujoNull" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.045, 0.757657, -0.664278)
+
+[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="EnkouShoujoNull"]
+event_name = "event:/Music/EnkouShoujo"
+event_guid = "{be9677fc-d5fd-48bb-945a-05f5ef297b41}"
+autoplay = true
+
+[node name="ChataKiokuNoSora" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5135, 1.72535, -13.1164)
+
+[node name="FmodEventEmitter3D" type="FmodEventEmitter3D" parent="ChataKiokuNoSora"]
+event_name = "event:/Music/SoraNoKioku"
+event_guid = "{177b7fdd-6d15-46b9-b86e-36dd1ca295f0}"
+autoplay = true
